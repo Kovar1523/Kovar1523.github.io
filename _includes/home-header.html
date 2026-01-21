@@ -1,0 +1,17 @@
+<div class="home-header pure-menu pure-menu-horizontal">
+  <div class="home-header-bar">
+    <div class="home-header-paths">
+      {% if page.url == "/" %}
+        <div class="home-header-path-list" aria-label="Current page">
+          <span class="home-header-path-current">&#xD648;</span>
+        </div>
+      {% else %}
+        <div class="home-header-path-list" aria-label="Current page path">
+          <a class="home-header-path-item" href="{{ '/' | relative_url }}">&#xD648;</a>
+          <span class="home-header-sep">&gt;</span>
+          <span class="home-header-path-current">{{ page.title | default: page.url | escape }}</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

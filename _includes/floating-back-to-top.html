@@ -1,0 +1,84 @@
+<div class="floating-scroll-buttons" aria-label="Scroll controls">
+  <button type="button" class="floating-scroll-button" data-action="top" aria-label="Back to top" title="TOP">
+    <span class="floating-scroll-label">TOP↑</span>
+  </button>
+  <button type="button" class="floating-scroll-button" data-action="bottom" aria-label="Scroll to bottom" title="Bottom">
+    <span class="floating-scroll-label">Bottom↓</span>
+  </button>
+</div>
+
+<script>
+  (function () {
+    const buttons = document.querySelector(".floating-scroll-buttons");
+    if (!buttons) return;
+
+    function getSpacerPx() {
+      const probe = document.createElement("div");
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      probe.style.pointerEvents = "none";
+      probe.style.width = "var(--spacer)";
+      document.body.appendChild(probe);
+      const width = probe.getBoundingClientRect().width;
+      document.body.removeChild(probe);
+      return Math.max(0, width || 16);
+    }
+
+    const spacerPx = getSpacerPx();
+
+    function updateRightOffset() {
+      const tocWrapper = document.querySelector(".toc-wrapper");
+      const anchorEl = tocWrapper || document.querySelector(".sidebar-right");
+      if (!anchorEl) {
+        buttons.style.setProperty("--floating-scroll-right", `${spacerPx}px`);
+        return;
+      }
+
+      const style = window.getComputedStyle(anchorEl);
+      if (style.display === "none" || style.visibility === "hidden") {
+        buttons.style.setProperty("--floating-scroll-right", `${spacerPx}px`);
+        return;
+      }
+
+      const rect = anchorEl.getBoundingClientRect();
+      if (rect.width <= 0) {
+        buttons.style.setProperty("--floating-scroll-right", `${spacerPx}px`);
+        return;
+      }
+
+      const gutter = Math.max(0, window.innerWidth - rect.right);
+
+      let paddingRight = 0;
+      if (tocWrapper && anchorEl === tocWrapper) {
+        const parsed = Number.parseFloat(style.paddingRight || "0");
+        paddingRight = Number.isFinite(parsed) ? parsed : 0;
+      }
+
+      const rightPx = Math.max(0, gutter + paddingRight);
+      buttons.style.setProperty("--floating-scroll-right", `${rightPx}px`);
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+
+    function scrollToBottom() {
+      const doc = document.documentElement;
+      const body = document.body;
+      const height = Math.max(doc.scrollHeight, body ? body.scrollHeight : 0);
+      window.scrollTo({ top: height, left: 0, behavior: "smooth" });
+    }
+
+    buttons.addEventListener("click", (e) => {
+      const target = e.target instanceof Element ? e.target.closest("[data-action]") : null;
+      if (!target) return;
+      const action = target.getAttribute("data-action");
+      if (action === "top") scrollToTop();
+      if (action === "bottom") scrollToBottom();
+    });
+
+    window.addEventListener("resize", updateRightOffset);
+    updateRightOffset();
+    window.setTimeout(updateRightOffset, 0);
+  })();
+</script>

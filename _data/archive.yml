@@ -1,0 +1,11 @@
+- title: 홈
+  url: /
+- type: dates
+  title: 아카이브
+  url: /archive/
+- type: categories
+  title: 카테고리
+  url: /categories/
+- type: tags
+  title: 태그
+  url: /tags/

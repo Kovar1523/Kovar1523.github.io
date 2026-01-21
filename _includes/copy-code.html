@@ -1,0 +1,82 @@
+<script>
+  (function () {
+    function getCodeText(highlightEl) {
+      const rougeCodePre = highlightEl.querySelector(".rouge-code pre");
+      if (rougeCodePre) return rougeCodePre.innerText;
+
+      const pre = highlightEl.querySelector("pre");
+      if (!pre) return "";
+
+      const code = pre.querySelector("code");
+      return (code || pre).innerText;
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      return new Promise((resolve, reject) => {
+        try {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.setAttribute("readonly", "");
+          textarea.style.position = "fixed";
+          textarea.style.left = "-9999px";
+          textarea.style.top = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(textarea);
+          if (!ok) reject(new Error("copy failed"));
+          else resolve();
+        } catch (e) {
+          reject(e);
+        }
+      });
+    }
+
+    function installCopyButtons() {
+      document.querySelectorAll(".highlight").forEach((highlightEl) => {
+        if (highlightEl.querySelector(".copy-code-button")) return;
+
+        const text = getCodeText(highlightEl);
+        if (!text || !text.trim()) return;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-code-button";
+        button.setAttribute("aria-label", "Copy code");
+        button.setAttribute("title", "Copy");
+        button.innerHTML = '<i class="fa-regular fa-copy far fa-copy"></i>';
+
+        button.addEventListener("click", async () => {
+          try {
+            await copyText(getCodeText(highlightEl));
+            button.classList.remove("is-copied");
+            // Force reflow so the success animation re-triggers on repeated clicks.
+            void button.offsetWidth;
+            button.classList.add("is-copied");
+            button.setAttribute("title", "Copied!");
+            button.setAttribute("aria-label", "Copied");
+            window.setTimeout(() => {
+              button.classList.remove("is-copied");
+              button.setAttribute("title", "Copy");
+              button.setAttribute("aria-label", "Copy code");
+            }, 1200);
+          } catch (_) {
+            button.setAttribute("title", "Copy failed");
+          }
+        });
+
+        highlightEl.appendChild(button);
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", installCopyButtons);
+    } else {
+      installCopyButtons();
+    }
+  })();
+</script>

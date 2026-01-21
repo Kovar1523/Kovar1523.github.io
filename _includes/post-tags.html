@@ -1,0 +1,27 @@
+{%- if site.data.archive -%}
+  {%- for item in site.data.archive -%}
+    {%- if item.type == "tags" -%}
+      {% assign tags_archive_page = item.url %}
+      {% break %}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<div class="post-tags-section">
+  <img class="post-tags-icon" src="{{ 'assets/img/tag.png' | relative_url }}" alt="" aria-hidden="true">
+  <span class="post-tags-label">태그</span>
+  <ul class="post-tags">
+    {%- for tag in page.tags -%}
+      <li>
+        {% assign slugified_tag = tag | slugify %}
+        {%- if tags_archive_page -%}
+          <a class="post-tag" href="{{ tags_archive_page | relative_url }}#{{ slugified_tag }}">
+            <span class="post-tag-text">{{ slugified_tag }}</span>
+          </a>
+        {%- else -%}
+          <span class="post-tag"><span class="post-tag-text">{{ slugified_tag }}</span></span>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>

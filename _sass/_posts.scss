@@ -1,0 +1,383 @@
+// Posts and pages
+//
+// Each post is wrapped in `.post` and is used on default and post layouts. Each
+// page is wrapped in `.page` and is only used on the page layout.
+
+.post-entry {
+  font-family: var(--body-font);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--spacer-3);
+}
+
+.home-page-title {
+  font-family: var(--body-font);
+  font-size: 4.8rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--heading-color);
+}
+
+.home-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacer-2);
+  margin: var(--spacer-2) 0 var(--spacer-3);
+  flex-wrap: wrap;
+}
+
+.empty-posts {
+  margin-top: var(--spacer-2);
+}
+
+.home-page-code {
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--border-radius);
+  font-family: var(--code-font);
+  font-size: 1rem;
+  flex: 1 1 24rem;
+  max-width: 30rem;
+  min-height: 6.5rem;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.home-page-code code {
+  font-family: inherit;
+}
+
+.page,
+.post {
+  font-family: var(--text-font);
+  margin-bottom: 4em;
+
+  h1, h2, h3, h4, h5, h6, .post-meta {
+    font-family: var(--body-font);
+  }
+
+  li + li {
+    margin-top: .25rem;
+  }
+}
+
+// Blog post or page title
+.page-title,
+.post-title {
+  color: var(--heading-color);
+}
+.page-title,
+.post-title {
+  margin-top: 0;
+}
+
+.info-page .page-title {
+  margin-bottom: var(--spacer-3);
+}
+.post-title a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.post-entry .post-title a {
+  color: #FB402C;
+
+  &:hover,
+  &:focus {
+    color: #FB402C;
+  }
+}
+
+// Meta data line below post title
+.post-meta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: -.5rem;
+  margin-bottom: var(--spacer);
+  color: var(--gray-600);
+}
+
+.post-meta-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.post-meta-icon {
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0 0.35em 0 0;
+  flex: 0 0 auto;
+  display: inline-block;
+  align-self: center;
+  vertical-align: middle;
+  border-radius: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.post-meta-categories-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  row-gap: 0.35rem;
+}
+
+.post-meta-categories-list .post-category {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05em 0.45em;
+  font-size: 0.95em;
+  color: var(--gray-600);
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5em;
+  background-color: transparent;
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+.post-meta-categories-list .post-category:hover,
+.post-meta-categories-list .post-category:focus-visible {
+  color: var(--link-color);
+  background-color: rgba(var(--accent-rgb), 0.1);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.post-meta-categories-list .post-category-text {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size 220ms ease;
+}
+
+.post-meta-categories-list .post-category:hover .post-category-text,
+.post-meta-categories-list .post-category:focus-visible .post-category-text {
+  background-size: 100% 2px;
+}
+
+.comment-count {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+
+// Related posts
+.related {
+  font-family: var(--body-font);
+  padding-top: var(--spacer-2);
+  padding-bottom: var(--spacer-2);
+  margin-bottom: var(--spacer-2);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.related-posts {
+  font-family: var(--body-font);
+  padding-left: 0;
+  list-style: none;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  a {
+    text-decoration: none;
+
+    small {
+      color: var(--gray-600);
+    }
+  }
+}
+
+.post-tags-section {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: var(--spacer) 0;
+  color: var(--gray-600);
+  font-family: var(--body-font);
+}
+
+.post-tags-label {
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.post-tags-icon {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0;
+  flex: 0 0 auto;
+  align-self: center;
+  vertical-align: middle;
+  border-radius: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacer);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: inline-block;
+    margin-right: 0;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        color: var(--link-color);
+        background-color: rgba(var(--accent-rgb), 0.12);
+        border-color: rgba(var(--accent-rgb), 0.45);
+      }
+    }
+  }
+}
+
+.post-tag {
+  padding: .1em .5em;
+  border: 1px solid var(--border-color);
+  border-radius: .5em;
+}
+
+.post-meta-tags-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  row-gap: 0.35rem;
+}
+
+.post-tags .post-tag,
+.post-meta-tags-list .post-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05em 0.45em;
+  font-size: 0.95em;
+  color: var(--gray-600);
+  text-decoration: none;
+  background-color: transparent;
+  border-color: var(--border-color);
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+.post-tags .post-tag:hover,
+.post-tags .post-tag:focus-visible,
+.post-meta-tags-list .post-tag:hover,
+.post-meta-tags-list .post-tag:focus-visible {
+  color: var(--link-color);
+  background-color: rgba(var(--accent-rgb), 0.1);
+  border-color: rgba(var(--accent-rgb), 0.6);
+}
+
+.post-tags .post-tag-text,
+.post-meta-tags-list .post-tag-text {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size 220ms ease;
+}
+
+.post-tags .post-tag:hover .post-tag-text,
+.post-tags .post-tag:focus-visible .post-tag-text,
+.post-meta-tags-list .post-tag:hover .post-tag-text,
+.post-meta-tags-list .post-tag:focus-visible .post-tag-text {
+  background-size: 100% 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-tags .post-tag,
+  .post-tags .post-tag-text,
+  .post-meta-categories-list .post-category,
+  .post-meta-categories-list .post-category-text,
+  .post-meta-tags-list .post-tag,
+  .post-meta-tags-list .post-tag-text {
+    transition: none;
+  }
+}
+
+.floating-scroll-buttons {
+  position: fixed;
+  right: var(--floating-scroll-right, var(--spacer));
+  bottom: var(--spacer);
+  z-index: 50;
+  display: inline-flex;
+  flex-direction: column;
+  gap: calc(var(--spacer) * 0.35);
+}
+
+.floating-scroll-button {
+  font-family: "GalmuriMono11", var(--body-font);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.22rem 0.45rem;
+  border: 1px solid rgba(var(--accent-rgb), 0.55);
+  border-radius: 999px;
+  background-color: rgba(var(--accent-rgb), 0.12);
+  color: var(--link-color);
+  cursor: pointer;
+  opacity: 0.92;
+  transition: opacity 160ms ease, transform 160ms ease,
+    background-color 160ms ease, border-color 160ms ease;
+}
+
+.floating-scroll-label {
+  background-image: linear-gradient(var(--link-color), var(--link-color));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size 220ms ease;
+}
+
+.floating-scroll-button:hover,
+.floating-scroll-button:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+  background-color: rgba(var(--accent-rgb), 0.18);
+  border-color: rgba(var(--accent-rgb), 0.7);
+}
+
+.floating-scroll-button:hover .floating-scroll-label,
+.floating-scroll-button:focus-visible .floating-scroll-label {
+  background-size: 100% 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-scroll-button,
+  .floating-scroll-label {
+    transition: none;
+  }
+}
+
+@media print {
+  .floating-scroll-buttons {
+    display: none;
+  }
+}

@@ -1,0 +1,10 @@
+- title: 홈
+  url: /
+- title: 카테고리
+  url: /categories/
+- title: 태그
+  url: /tags/
+- title: 아카이브
+  url: /archive/
+- title: 정보
+  url: /about/
