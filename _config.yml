@@ -1,5 +1,6 @@
 # Setup
 title: Kovar1523's Devlog
+name: Kovar1523's Devlog
 description: Sometimes, it's good to look up at the stars in the night sky.
 url: https://vszhub.github.io
 avatar: /avatar.jpeg
@@ -7,6 +8,7 @@ paginate: 5
 permalink: pretty
 cover_image: /bg.jpeg
 date_format: "%Y-%m-%d"
+logo: /assets/img/siteicon.png
 
 plugins:
   - not-pure-poole
@@ -34,7 +36,7 @@ exclude:
 
 # Optimize Jekyl SEO Tag
 social:
-  name: Kovar1523
+  name: Kovar1523's Devlog
   links:
     - https://github.com/Kovar1523
 google_site_verification: xxxxx
