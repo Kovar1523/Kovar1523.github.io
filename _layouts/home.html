@@ -29,7 +29,7 @@ layout: default
       <span class="post-meta-item post-meta-views">
         <img class="post-meta-icon" src="{{ 'assets/img/eye.png' | relative_url }}" alt="" aria-hidden="true">
         <span class="post-meta-label">조회수:</span>
-        <span class="post-view-count" data-post-url="{{ post.url | absolute_url }}">0</span>
+        <span class="post-view-count" data-post-path="{{ post.url | relative_url }}">0</span>
       </span>
       {%- if post.categories and post.categories != empty -%}
         <span class="post-meta-item post-meta-categories">
@@ -138,24 +138,51 @@ layout: default
 
 <script>
   (function () {
+    const cache = new Map();
+
+    function normalizePath(path) {
+      try {
+        const url = new URL(path, window.location.origin);
+        return url.pathname + url.search;
+      } catch (_) {
+        return path;
+      }
+    }
+
+    function encodePath(path) {
+      const trimmed = String(path || "").replace(/^\/+/, "");
+      if (!trimmed) return "";
+      return trimmed.split("/").map(encodeURIComponent).join("/");
+    }
+
+    function fetchCount(path) {
+      const normalizedPath = normalizePath(path);
+      if (cache.has(normalizedPath)) return cache.get(normalizedPath);
+
+      const endpoint = `https://kovar1523.goatcounter.com/counter/${encodePath(normalizedPath)}.json`;
+      const request = fetch(endpoint, { mode: "cors", credentials: "omit" })
+        .then((res) => res.json())
+        .then((data) => {
+          const views = Number.parseInt(data && data.count ? data.count : "0", 10);
+          return Number.isFinite(views) ? views : null;
+        })
+        .catch(() => null);
+
+      cache.set(normalizedPath, request);
+      return request;
+    }
+
     function updateViewCounts() {
-      const els = document.querySelectorAll(".post-view-count[data-post-url]");
+      const els = document.querySelectorAll(".post-view-count[data-post-path]");
       if (!els.length) return;
 
       els.forEach((viewEl) => {
-        const postUrl = viewEl.getAttribute("data-post-url");
-        if (!postUrl) return;
+        const postPath = viewEl.getAttribute("data-post-path");
+        if (!postPath) return;
 
-        try {
-          const storageKey = `post_views:${postUrl}`;
-
-          let views = Number.parseInt(window.localStorage.getItem(storageKey) || "0", 10);
-          if (!Number.isFinite(views) || views < 0) views = 0;
-
-          viewEl.textContent = views.toLocaleString();
-        } catch (_) {
-          viewEl.textContent = "-";
-        }
+        fetchCount(postPath).then((views) => {
+          viewEl.textContent = views === null ? "-" : views.toLocaleString();
+        });
       });
     }
 

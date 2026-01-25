@@ -22,7 +22,7 @@ layout: default
     <span class="post-meta-item post-meta-views">
       <img class="post-meta-icon" src="{{ 'assets/img/eye.png' | relative_url }}" alt="" aria-hidden="true">
       <span class="post-meta-label">조회수:</span>
-      <span class="post-view-count" data-post-url="{{ page.url | absolute_url }}">0</span>
+      <span class="post-view-count" data-post-path="{{ page.url | relative_url }}">0</span>
     </span>
     {%- if page.categories and page.categories != empty -%}
       <span class="post-meta-item post-meta-categories">
@@ -64,29 +64,39 @@ layout: default
 
 <script>
   (function () {
-    const viewEl = document.querySelector(".post-view-count[data-post-url]");
+    const viewEl = document.querySelector(".post-view-count[data-post-path]");
     if (!viewEl) return;
 
-    const postUrl = viewEl.getAttribute("data-post-url");
-    if (!postUrl) return;
+    const postPath = viewEl.getAttribute("data-post-path");
+    if (!postPath) return;
 
-    try {
-      const storageKey = `post_views:${postUrl}`;
-      const sessionKey = `post_viewed:${postUrl}`;
-
-      let views = Number.parseInt(window.localStorage.getItem(storageKey) || "0", 10);
-      if (!Number.isFinite(views) || views < 0) views = 0;
-
-      if (!window.sessionStorage.getItem(sessionKey)) {
-        views += 1;
-        window.localStorage.setItem(storageKey, String(views));
-        window.sessionStorage.setItem(sessionKey, "1");
+    function normalizePath(path) {
+      try {
+        const url = new URL(path, window.location.origin);
+        return url.pathname + url.search;
+      } catch (_) {
+        return path;
       }
-
-      viewEl.textContent = views.toLocaleString();
-    } catch (_) {
-      viewEl.textContent = "-";
     }
+
+    function encodePath(path) {
+      const trimmed = String(path || "").replace(/^\/+/, "");
+      if (!trimmed) return "";
+      return trimmed.split("/").map(encodeURIComponent).join("/");
+    }
+
+    const normalizedPath = normalizePath(postPath);
+    const endpoint = `https://kovar1523.goatcounter.com/counter/${encodePath(normalizedPath)}.json`;
+
+    fetch(endpoint, { mode: "cors", credentials: "omit" })
+      .then((res) => res.json())
+      .then((data) => {
+        const views = Number.parseInt(data && data.count ? data.count : "0", 10);
+        viewEl.textContent = Number.isFinite(views) ? views.toLocaleString() : "-";
+      })
+      .catch(() => {
+        viewEl.textContent = "-";
+      });
   })();
 </script>
 
