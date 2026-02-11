@@ -4,3 +4,17 @@
   1. Head over to https://realfavicongenerator.net/ to add your own favicons.
   2. Customize default _includes/custom-head.html in your source directory and insert the given code snippet.
 {% endcomment %}
+
+{%- if site.enforce_ssl -%}
+  <script>
+    (() => {
+      const host = {{ site.enforce_ssl | jsonify }};
+      if (!host) return;
+      if (window.location.hostname !== host) return;
+      if (window.location.protocol === "https:") return;
+      window.location.replace(
+        `https://${host}${window.location.pathname}${window.location.search}${window.location.hash}`
+      );
+    })();
+  </script>
+{%- endif -%}

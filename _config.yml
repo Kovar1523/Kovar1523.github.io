@@ -2,7 +2,9 @@
 title: Kovar1523's Devlog
 name: Kovar1523's Devlog
 description: Sometimes, it's good to look up at the stars in the night sky.
-url: https://vszhub.github.io
+url: https://kovar1523dev.kro.kr
+baseurl: ""
+enforce_ssl: kovar1523dev.kro.kr
 avatar: /avatar.jpeg
 paginate: 5
 permalink: pretty
@@ -12,9 +14,6 @@ logo: /assets/img/siteicon.png
 
 plugins:
   - not-pure-poole
-
-# Gems
-plugins:
   - jekyll-gist
   - jekyll-paginate
   - jekyll-seo-tag
