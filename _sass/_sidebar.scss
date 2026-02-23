@@ -54,8 +54,10 @@
 
 .avatar-image {
   width: 30%;
-  height: auto;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
+  object-fit: cover;
+  background-color: #fff;
   display: block;
   margin-right: auto;
   margin-left: auto;
