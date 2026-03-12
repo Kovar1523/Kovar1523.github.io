@@ -23,12 +23,12 @@
 }
 
 .masthead-title {
-  font-family: "GalmuriMono11", var(--body-font);
+  font-family: var(--body-font);
 }
 
 .masthead-tagline,
 .navigation {
-  font-family: "GalmuriMono11", var(--body-font);
+  font-family: var(--body-font);
 }
 
 .navigation {
@@ -40,12 +40,12 @@
   font-family: inherit;
 }
 .masthead-title {
-  font-family: "GalmuriMono11", var(--body-font);
+  font-family: var(--body-font);
 }
 
 .masthead-tagline,
 .navigation {
-  font-family: "GalmuriMono11", var(--body-font);
+  font-family: var(--body-font);
 }
 
 .navigation a {
