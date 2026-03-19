@@ -20,7 +20,7 @@
 
 .post-entry-cover-link {
   display: block;
-  width: clamp(5.5rem, 18vw, 8.5rem);
+  width: clamp(6.5rem, 20vw, 9.75rem);
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: calc(var(--border-radius) * 1.35);
@@ -370,7 +370,7 @@
   }
 
   .post-entry-cover-link {
-    width: 4.75rem;
+    width: 5.5rem;
     border-radius: calc(var(--border-radius) * 1.1);
   }
 }
