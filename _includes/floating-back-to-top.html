@@ -27,33 +27,27 @@
     const spacerPx = getSpacerPx();
 
     function updateRightOffset() {
-      const tocWrapper = document.querySelector(".toc-wrapper");
-      const anchorEl = tocWrapper || document.querySelector(".sidebar-right");
-      if (!anchorEl) {
+      const sidebarRight = document.querySelector(".sidebar-right");
+      if (!sidebarRight) {
         buttons.style.setProperty("--floating-scroll-right", `${spacerPx}px`);
         return;
       }
 
-      const style = window.getComputedStyle(anchorEl);
+      const style = window.getComputedStyle(sidebarRight);
       if (style.display === "none" || style.visibility === "hidden") {
         buttons.style.setProperty("--floating-scroll-right", `${spacerPx}px`);
         return;
       }
 
-      const rect = anchorEl.getBoundingClientRect();
+      const rect = sidebarRight.getBoundingClientRect();
       if (rect.width <= 0) {
         buttons.style.setProperty("--floating-scroll-right", `${spacerPx}px`);
         return;
       }
 
       const gutter = Math.max(0, window.innerWidth - rect.right);
-
-      let paddingRight = 0;
-      if (tocWrapper && anchorEl === tocWrapper) {
-        const parsed = Number.parseFloat(style.paddingRight || "0");
-        paddingRight = Number.isFinite(parsed) ? parsed : 0;
-      }
-
+      const parsed = Number.parseFloat(style.paddingRight || "0");
+      const paddingRight = Number.isFinite(parsed) ? parsed : 0;
       const rightPx = Math.max(0, gutter + paddingRight);
       buttons.style.setProperty("--floating-scroll-right", `${rightPx}px`);
     }

@@ -28,6 +28,7 @@
   color: var(--body-color);
 }
 
+.layout-home .content,
 .layout-post .content {
   width: 100%;
 }
@@ -65,6 +66,7 @@ footer {
     width: 22%;
   }
 
+  .layout-home .content,
   .layout-post .content {
     width: 78%;
   }
@@ -79,10 +81,12 @@ footer {
     display: block;
   }
 
+  .layout-home .content,
   .layout-post .content {
     width: 60%;
   }
 
+  .layout-home .sidebar-right,
   .layout-post .sidebar-right {
     width: 18%;
   }
