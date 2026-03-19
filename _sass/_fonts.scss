@@ -1,23 +1,20 @@
-@font-face {
-  font-family: "Noto Serif KR";
-  src: url("fonts/NotoSerifCJKkr-Regular-subset.woff2") format("woff2");
+.noto-serif-kr-site {
+  font-family: "Noto Serif KR", serif;
+  font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
 }
 
-@font-face {
-  font-family: "Noto Serif KR";
-  src: url("fonts/NotoSerifCJKkr-Regular-subset.woff2") format("woff2");
+.noto-serif-kr-semibold {
+  font-family: "Noto Serif KR", serif;
+  font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
-  font-display: swap;
 }
 
-@font-face {
-  font-family: "Noto Serif KR";
-  src: url("fonts/NotoSerifCJKkr-Regular-subset.woff2") format("woff2");
+.noto-serif-kr-bold {
+  font-family: "Noto Serif KR", serif;
+  font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
 }

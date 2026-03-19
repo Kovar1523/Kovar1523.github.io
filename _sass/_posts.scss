@@ -4,9 +4,34 @@
 // page is wrapped in `.page` and is only used on the page layout.
 
 .post-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacer);
   font-family: var(--body-font);
   border-bottom: 1px solid var(--border-color);
   margin-bottom: var(--spacer-3);
+  padding-bottom: var(--spacer-2);
+}
+
+.post-entry-body {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.post-entry-cover-link {
+  display: block;
+  width: clamp(5.5rem, 18vw, 8.5rem);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: calc(var(--border-radius) * 1.35);
+  flex: 0 0 auto;
+}
+
+.post-entry-cover-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .home-page-title {
@@ -61,6 +86,18 @@
   }
 }
 
+.post-cover {
+  margin: 0 0 var(--spacer-2);
+}
+
+.post-cover-image {
+  display: block;
+  width: 100%;
+  max-height: 24rem;
+  object-fit: cover;
+  border-radius: calc(var(--border-radius) * 1.2);
+}
+
 // Blog post or page title
 .page-title,
 .post-title {
@@ -91,6 +128,14 @@
   &:focus {
     color: #FB402C;
   }
+}
+
+.post-entry .post-title {
+  margin-bottom: 0.35rem;
+}
+
+.post-entry p:last-child {
+  margin-bottom: 0;
 }
 
 // Meta data line below post title
@@ -316,6 +361,17 @@
   .post-meta-tags-list .post-tag,
   .post-meta-tags-list .post-tag-text {
     transition: none;
+  }
+}
+
+@media (max-width: $sm-width) {
+  .post-entry {
+    gap: 0.85rem;
+  }
+
+  .post-entry-cover-link {
+    width: 4.75rem;
+    border-radius: calc(var(--border-radius) * 1.1);
   }
 }
 

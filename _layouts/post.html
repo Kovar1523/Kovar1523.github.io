@@ -5,6 +5,14 @@ layout: default
 {% include home-header.html %}
 
 <article class="post">
+  {% if page.cover_image %}
+    <figure class="post-cover">
+      <img
+        class="post-cover-image"
+        src="{{ page.cover_image | relative_url }}"
+        alt="{{ page.title | escape }}">
+    </figure>
+  {% endif %}
   <h1 class="post-title">{{ page.title }}</h1>
   <div class="post-meta">
     {%- assign date_format = site.date_format | default: "%-d %b %Y" -%}
