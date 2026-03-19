@@ -87,8 +87,8 @@
 }
 
 .post-cover {
-  margin: 0 calc(var(--spacer-2) * -1) var(--spacer-2);
-  width: calc(100% + (var(--spacer-2) * 2));
+  margin: 0 0 var(--spacer-2);
+  width: 100%;
 }
 
 .post-cover-image {
@@ -97,14 +97,6 @@
   max-height: 20rem;
   object-fit: cover;
   border-radius: 0;
-}
-
-@media (min-width: $md-width) {
-  .post-cover {
-    margin-left: calc(var(--spacer-3) * -1);
-    margin-right: calc(var(--spacer-3) * -1);
-    width: calc(100% + (var(--spacer-3) * 2));
-  }
 }
 
 // Blog post or page title
