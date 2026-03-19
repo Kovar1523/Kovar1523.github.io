@@ -3,7 +3,7 @@
 
   {% include head.html %}
 
-  <body class="noto-serif-kr-site">
+  <body class="noto-serif-kr-site layout-{{ page.layout | default: 'default' }}">
     {%- include loading-indicator.html -%}
 
     <div class="container pure-g">

@@ -28,6 +28,10 @@
   color: var(--body-color);
 }
 
+.layout-post .content {
+  width: 100%;
+}
+
 .sidebar-left {
   display: flex;
   padding: var(--spacer);
@@ -61,6 +65,10 @@ footer {
     width: 22%;
   }
 
+  .layout-post .content {
+    width: 78%;
+  }
+
   .home-header {
     margin-top: -2em;
   }
@@ -69,6 +77,14 @@ footer {
 @media (min-width: $lg-width) {
   .sidebar-right {
     display: block;
+  }
+
+  .layout-post .content {
+    width: 60%;
+  }
+
+  .layout-post .sidebar-right {
+    width: 18%;
   }
 }
 
