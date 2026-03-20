@@ -32,6 +32,10 @@
   width: 100%;
 }
 
+.layout-home .content {
+  width: 100%;
+}
+
 .sidebar-left {
   display: flex;
   padding: var(--spacer);
@@ -69,6 +73,10 @@ footer {
     width: 78%;
   }
 
+  .layout-home .content {
+    width: 78%;
+  }
+
   .home-header {
     margin-top: -2em;
   }
@@ -80,6 +88,10 @@ footer {
   }
 
   .layout-post .content {
+    width: 60%;
+  }
+
+  .layout-home .content {
     width: 60%;
   }
 
