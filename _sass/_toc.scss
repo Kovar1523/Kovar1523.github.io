@@ -78,6 +78,38 @@
   }
 }
 
+.activity-nav {
+  overflow-y: auto;
+}
+
+.activity-nav ul {
+  list-style: none;
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: bold;
+}
+
+.activity-row:last-child {
+  border-bottom: 0;
+}
+
+.activity-label {
+  color: var(--body-color);
+}
+
+.activity-value {
+  color: var(--link-color);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .toc-nav a {
     transition: none;

@@ -1,8 +1,8 @@
 {% if page.toc %}
-<div  class="toc-wrapper">
+<div class="toc-wrapper">
   <h2 class="toc-title">목차</h2>
-    <nav class="toc-nav">
-      {% include toc.html html=content h_min=2 h_max=3 skipNoIDs=true class="toc" %}
+  <nav class="toc-nav">
+    {% include toc.html html=content h_min=2 h_max=3 skipNoIDs=true class="toc" %}
   </nav>
 </div>
 <script>
@@ -90,6 +90,182 @@
 
     updateActive();
     window.setTimeout(updateActive, 0);
+  })();
+</script>
+{% elsif page.layout == "home" %}
+<section
+  class="toc-wrapper home-activity"
+  data-goatcounter-code="kovar1523"
+  data-giscus-repo="{{ site.giscus.repo | escape }}"
+  data-giscus-category="{{ site.giscus.category | slugify }}"
+>
+  <h2 class="toc-title">활동정보</h2>
+  <div class="toc-nav activity-nav" aria-label="Site activity">
+    <ul>
+      <li class="activity-row">
+        <span class="activity-label">전체 댓글 수</span>
+        <strong class="activity-value" data-activity-total-comments>로딩 중</strong>
+      </li>
+      <li class="activity-row">
+        <span class="activity-label">오늘 조회수</span>
+        <strong class="activity-value" data-activity-today-views>로딩 중</strong>
+      </li>
+      <li class="activity-row">
+        <span class="activity-label">전체 조회수</span>
+        <strong class="activity-value" data-activity-total-views>로딩 중</strong>
+      </li>
+    </ul>
+  </div>
+</section>
+<script>
+  (function () {
+    const panel = document.querySelector(".home-activity");
+    if (!panel) return;
+
+    const commentsEl = panel.querySelector("[data-activity-total-comments]");
+    const todayViewsEl = panel.querySelector("[data-activity-today-views]");
+    const totalViewsEl = panel.querySelector("[data-activity-total-views]");
+    const goatcounterCode = panel.getAttribute("data-goatcounter-code");
+    const repoName = panel.getAttribute("data-giscus-repo");
+    const categorySlug = panel.getAttribute("data-giscus-category");
+
+    function setValue(el, value) {
+      if (!el) return;
+      el.textContent = value;
+    }
+
+    function formatNumber(value) {
+      return Number.isFinite(value) ? value.toLocaleString() : "-";
+    }
+
+    function formatSeoulDate(date) {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Seoul",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(date);
+
+      const year = parts.find((part) => part.type === "year");
+      const month = parts.find((part) => part.type === "month");
+      const day = parts.find((part) => part.type === "day");
+
+      if (!year || !month || !day) return "";
+      return [year.value, month.value, day.value].join("-");
+    }
+
+    async function fetchLooseJson(url, options) {
+      const response = await fetch(url, options);
+      const text = await response.text();
+
+      try {
+        return JSON.parse(text);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    async function fetchGoatcounterCount(path, params) {
+      if (!goatcounterCode) return null;
+
+      const query = new URLSearchParams(params || {});
+      const suffix = query.toString() ? `?${query.toString()}` : "";
+      const url = `https://${goatcounterCode}.goatcounter.com/counter/${encodeURIComponent(path)}.json${suffix}`;
+      const data = await fetchLooseJson(url, { mode: "cors", credentials: "omit" });
+      const count = Number.parseInt(data && data.count ? data.count.replaceAll(",", "") : "", 10);
+      return Number.isFinite(count) ? count : null;
+    }
+
+    function parseNextLink(linkHeader) {
+      if (!linkHeader) return null;
+
+      const links = linkHeader.split(",");
+      for (const link of links) {
+        const match = link.match(/<([^>]+)>;\s*rel="([^"]+)"/);
+        if (match && match[2] === "next") return match[1];
+      }
+
+      return null;
+    }
+
+    async function fetchTotalComments() {
+      if (!repoName || !repoName.includes("/")) return null;
+
+      const [owner, repo] = repoName.split("/", 2);
+      let url = `https://api.github.com/repos/${owner}/${repo}/discussions?per_page=100`;
+      let total = 0;
+
+      while (url) {
+        const response = await fetch(url, {
+          headers: {
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28"
+          },
+          mode: "cors",
+          credentials: "omit"
+        });
+
+        const discussions = await response.json().catch(() => null);
+        if (!Array.isArray(discussions)) return null;
+
+        for (const discussion of discussions) {
+          const isGiscusThread = discussion && discussion.user && discussion.user.login === "giscus[bot]";
+          const matchesCategory = discussion && discussion.category && discussion.category.slug === categorySlug;
+          if (!isGiscusThread || !matchesCategory) continue;
+
+          const comments = Number.parseInt(String(discussion.comments || 0), 10);
+          if (Number.isFinite(comments)) total += comments;
+        }
+
+        url = parseNextLink(response.headers.get("link"));
+      }
+
+      return total;
+    }
+
+    async function loadActivity() {
+      const today = formatSeoulDate(new Date());
+      const cacheKey = "home-activity-cache-v1";
+
+      try {
+        const cachedRaw = window.sessionStorage.getItem(cacheKey);
+        if (cachedRaw) {
+          const cached = JSON.parse(cachedRaw);
+          if (cached && cached.date === today && Date.now() - cached.savedAt < 15 * 60 * 1000) {
+            setValue(commentsEl, formatNumber(cached.totalComments));
+            setValue(todayViewsEl, formatNumber(cached.todayViews));
+            setValue(totalViewsEl, formatNumber(cached.totalViews));
+            return;
+          }
+        }
+      } catch (_) {}
+
+      const [totalComments, todayViews, totalViews] = await Promise.all([
+        fetchTotalComments().catch(() => null),
+        fetchGoatcounterCount("TOTAL", today ? { start: today, end: today } : null).catch(() => null),
+        fetchGoatcounterCount("TOTAL").catch(() => null)
+      ]);
+
+      setValue(commentsEl, formatNumber(totalComments));
+      setValue(todayViewsEl, formatNumber(todayViews));
+      setValue(totalViewsEl, formatNumber(totalViews));
+
+      try {
+        window.sessionStorage.setItem(cacheKey, JSON.stringify({
+          date: today,
+          savedAt: Date.now(),
+          totalComments,
+          todayViews,
+          totalViews
+        }));
+      } catch (_) {}
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", loadActivity, { once: true });
+    } else {
+      loadActivity();
+    }
   })();
 </script>
 {% endif %}
