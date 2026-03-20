@@ -98,6 +98,7 @@
   data-goatcounter-code="kovar1523"
   data-giscus-repo="{{ site.giscus.repo | escape }}"
   data-giscus-category="{{ site.giscus.category | slugify }}"
+  data-post-paths='[{% for post in site.posts %}"{{ post.url | relative_url }}"{% unless forloop.last %},{% endunless %}{% endfor %}]'
 >
   <h2 class="toc-title">활동정보</h2>
   <div class="toc-nav activity-nav" aria-label="Site activity">
@@ -121,11 +122,6 @@
   (function () {
     const panel = document.querySelector(".home-activity");
     if (!panel) return;
-    const postPaths = [
-      {% for post in site.posts %}
-      "{{ post.url | relative_url }}"{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    ];
 
     const commentsEl = panel.querySelector("[data-activity-total-comments]");
     const todayViewsEl = panel.querySelector("[data-activity-today-views]");
@@ -133,6 +129,7 @@
     const goatcounterCode = panel.getAttribute("data-goatcounter-code");
     const repoName = panel.getAttribute("data-giscus-repo");
     const categorySlug = panel.getAttribute("data-giscus-category");
+    const postPaths = JSON.parse(panel.getAttribute("data-post-paths") || "[]");
 
     function setValue(el, value) {
       if (!el) return;
@@ -159,6 +156,21 @@
       return [year.value, month.value, day.value].join("-");
     }
 
+    function normalizePath(path) {
+      try {
+        const url = new URL(path, window.location.origin);
+        return url.pathname + url.search;
+      } catch (_) {
+        return path;
+      }
+    }
+
+    function encodePath(path) {
+      const trimmed = String(path || "").replace(/^\/+/, "");
+      if (!trimmed) return "";
+      return trimmed.split("/").map(encodeURIComponent).join("/");
+    }
+
     async function fetchLooseJson(url, options) {
       const response = await fetch(url, options);
       const text = await response.text();
@@ -173,9 +185,10 @@
     async function fetchGoatcounterCount(path, params) {
       if (!goatcounterCode) return null;
 
+      const normalizedPath = normalizePath(path);
       const query = new URLSearchParams(params || {});
       const suffix = query.toString() ? `?${query.toString()}` : "";
-      const url = `https://${goatcounterCode}.goatcounter.com/counter/${encodeURIComponent(path)}.json${suffix}`;
+      const url = `https://${goatcounterCode}.goatcounter.com/counter/${encodePath(normalizedPath)}.json${suffix}`;
       const data = await fetchLooseJson(url, { mode: "cors", credentials: "omit" });
       const count = Number.parseInt(data && data.count ? data.count.replaceAll(",", "") : "", 10);
       return Number.isFinite(count) ? count : null;
