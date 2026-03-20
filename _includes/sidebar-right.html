@@ -121,6 +121,11 @@
   (function () {
     const panel = document.querySelector(".home-activity");
     if (!panel) return;
+    const postPaths = [
+      {% for post in site.posts %}
+      "{{ post.url | relative_url }}"{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
 
     const commentsEl = panel.querySelector("[data-activity-total-comments]");
     const todayViewsEl = panel.querySelector("[data-activity-today-views]");
@@ -174,6 +179,21 @@
       const data = await fetchLooseJson(url, { mode: "cors", credentials: "omit" });
       const count = Number.parseInt(data && data.count ? data.count.replaceAll(",", "") : "", 10);
       return Number.isFinite(count) ? count : null;
+    }
+
+    async function fetchPostViewsSum(params) {
+      if (!postPaths.length) return 0;
+
+      const counts = await Promise.all(
+        postPaths.map((path) => fetchGoatcounterCount(path, params).catch(() => null))
+      );
+
+      let total = 0;
+      for (const count of counts) {
+        if (Number.isFinite(count)) total += count;
+      }
+
+      return total;
     }
 
     function parseNextLink(linkHeader) {
@@ -243,7 +263,7 @@
       const [totalComments, todayViews, totalViews] = await Promise.all([
         fetchTotalComments().catch(() => null),
         fetchGoatcounterCount("TOTAL", today ? { start: today, end: today } : null).catch(() => null),
-        fetchGoatcounterCount("TOTAL").catch(() => null)
+        fetchPostViewsSum().catch(() => null)
       ]);
 
       setValue(commentsEl, formatNumber(totalComments));

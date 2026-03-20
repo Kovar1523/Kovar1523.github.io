@@ -98,6 +98,10 @@ footer {
   .layout-post .sidebar-right {
     width: 18%;
   }
+
+  .layout-home .sidebar-right {
+    width: 18%;
+  }
 }
 
 @media (max-width: $lg-width) {
